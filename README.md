@@ -1,6 +1,7 @@
+# 北斗GPS定位监控系统（BDS+GPS Tracking System）
 
+BDS:BeiDou Navigation Satellite System。
 
-![index](QQ20240415154120.png "index.png")
 <p>
     <img src="https://img.shields.io/badge/JDK-1.8+-green.svg"/>
     <img src="https://img.shields.io/badge/License-Apache 2.0-green.svg"/>
