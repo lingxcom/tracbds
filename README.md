@@ -1,9 +1,8 @@
 # 北斗GPS定位监控系统（BDS+GPS Tracking System）
 
-BDS:BeiDou Navigation Satellite System。
+BDS: BeiDou Navigation Satellite System.
 
 <p>
-    <img src="https://img.shields.io/badge/JDK-1.8+-green.svg"/>
     <img src="https://img.shields.io/badge/License-Apache 2.0-green.svg"/>
     <img src="https://img.shields.io/badge/platform-linux%20|%20macos%20|%20windows-blue.svg" />
     <img src="https://img.shields.io/badge/QQ-283853318-blue"/>
