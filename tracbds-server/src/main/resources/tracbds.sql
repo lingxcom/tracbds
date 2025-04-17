@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 11
-Source Server Version : 80032
+Source Server         : localhost
+Source Server Version : 50561
 Source Host           : localhost:3306
-Source Database       : gps31
+Source Database       : tracbds
 
 Target Server Type    : MYSQL
-Target Server Version : 80032
+Target Server Version : 50561
 File Encoding         : 65001
 
-Date: 2025-04-10 14:36:10
+Date: 2025-04-17 16:27:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,15 +20,15 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_alarm_config`;
 CREATE TABLE `tgps_alarm_config` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL COMMENT '报警名称',
-  `bit` int NOT NULL COMMENT '状态位',
+  `bit` int(11) NOT NULL COMMENT '状态位',
   `status` char(1) DEFAULT '0' COMMENT '是否启用',
   `icon_alarm` char(1) DEFAULT '1' COMMENT '图标报警',
   `audio_alarm` char(1) DEFAULT '1' COMMENT '声音报警',
   `push_alarm` char(1) DEFAULT '1' COMMENT '手机推送',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tgps_alarm_config
@@ -68,7 +68,7 @@ INSERT INTO `tgps_alarm_config` VALUES ('29', '非法开门报警', '31', '0', '
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_car`;
 CREATE TABLE `tgps_car` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `tid` varchar(32) NOT NULL COMMENT '设备号',
   `carno` varchar(100) NOT NULL DEFAULT '' COMMENT '车牌号码',
   `sim` varchar(64) NOT NULL COMMENT '车载SIM',
@@ -78,13 +78,13 @@ CREATE TABLE `tgps_car` (
   `mileage` decimal(10,1) DEFAULT '0.0' COMMENT '总里程',
   `stime` char(14) DEFAULT '' COMMENT '服务开始时间',
   `etime` char(14) DEFAULT '' COMMENT '服务截止时间',
-  `alarm` int unsigned DEFAULT '0' COMMENT '定位报警',
-  `status` int unsigned DEFAULT '0' COMMENT '定位状态',
+  `alarm` int(10) unsigned DEFAULT '0' COMMENT '定位报警',
+  `status` int(10) unsigned DEFAULT '0' COMMENT '定位状态',
   `lat` decimal(10,6) DEFAULT NULL COMMENT '纬度',
   `lng` decimal(10,6) DEFAULT NULL COMMENT '经度',
-  `height` int DEFAULT '0' COMMENT '高程',
-  `speed` int DEFAULT '0' COMMENT '时速',
-  `direction` int DEFAULT '0' COMMENT '方向',
+  `height` int(11) DEFAULT '0' COMMENT '高程',
+  `speed` int(11) DEFAULT '0' COMMENT '时速',
+  `direction` int(11) DEFAULT '0' COMMENT '方向',
   `location` char(1) DEFAULT '0' COMMENT '是否定位',
   `acc` char(1) DEFAULT NULL COMMENT '最后的ACC状态',
   `gpstime` char(14) DEFAULT NULL COMMENT '最后定位时间',
@@ -99,15 +99,20 @@ CREATE TABLE `tgps_car` (
   `iccid` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_TID` (`tid`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tgps_car
+-- ----------------------------
+INSERT INTO `tgps_car` VALUES ('1', '12345678912', '12345678912', '', '', '', '0', '0.0', '20250415', '20260415', '0', '3', '39.816383', '116.396622', '0', '10', '1', '1', '1', '20250415112128', '20250415112128', '', '20250415105109', '20250415105109', '0', '0.0', '', 'car_icon_0', null);
 
 -- ----------------------------
 -- Table structure for `tgps_car_alarm`
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_car_alarm`;
 CREATE TABLE `tgps_car_alarm` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `car_id` int NOT NULL COMMENT '所属车辆',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `car_id` int(11) NOT NULL COMMENT '所属车辆',
   `name` varchar(100) NOT NULL COMMENT '报警类型',
   `systime` varchar(14) DEFAULT '' COMMENT '系统时间',
   `speed` decimal(4,1) DEFAULT '0.0' COMMENT '时速',
@@ -115,7 +120,7 @@ CREATE TABLE `tgps_car_alarm` (
   `lng` decimal(9,6) DEFAULT '0.000000',
   `gpstime` char(14) DEFAULT NULL,
   `mileage` decimal(10,1) DEFAULT '0.0' COMMENT '里程',
-  `time` int DEFAULT '0' COMMENT '持续时间(秒)',
+  `time` int(11) DEFAULT '0' COMMENT '持续时间(秒)',
   `bjlc` decimal(6,1) DEFAULT '0.0' COMMENT '报警里程KM',
   `end_lat` decimal(9,6) DEFAULT '0.000000',
   `end_lng` decimal(9,6) DEFAULT '0.000000',
@@ -129,15 +134,19 @@ CREATE TABLE `tgps_car_alarm` (
   KEY `IDX_CARID` (`car_id`) USING BTREE,
   KEY `IDX_NAME` (`name`),
   KEY `IDX_GPSTIME` (`gpstime`)
-) ENGINE=InnoDB AUTO_INCREMENT=286 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tgps_car_alarm
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `tgps_car_cmd`
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_car_cmd`;
 CREATE TABLE `tgps_car_cmd` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `car_id` int NOT NULL COMMENT '车辆',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `car_id` int(11) NOT NULL COMMENT '车辆',
   `cmd_id` varchar(100) NOT NULL COMMENT '指令类型',
   `user_id` char(36) NOT NULL COMMENT '操作用户',
   `status` char(1) DEFAULT '2' COMMENT '发送状态',
@@ -145,7 +154,7 @@ CREATE TABLE `tgps_car_cmd` (
   `cmd_str` text NOT NULL COMMENT '指令内容',
   PRIMARY KEY (`id`),
   KEY `IDX_CAR_CMD` (`car_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3141 DEFAULT CHARSET=utf8mb3;
+) ENGINE=MyISAM AUTO_INCREMENT=3141 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tgps_car_cmd
@@ -188,23 +197,23 @@ INSERT INTO `tgps_car_cmd` VALUES ('3140', '21', '8801', '43b2f84b-6e2d-4c4a-87d
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_car_photo`;
 CREATE TABLE `tgps_car_photo` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `car_id` int NOT NULL COMMENT '车辆',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `car_id` int(11) NOT NULL COMMENT '车辆',
   `path` varchar(200) DEFAULT NULL COMMENT '照片',
   `acc` char(1) DEFAULT NULL COMMENT 'ACC',
   `lat` decimal(9,6) DEFAULT NULL COMMENT '纬度',
   `lng` decimal(9,6) DEFAULT NULL COMMENT '经度',
   `speed` decimal(6,1) DEFAULT NULL COMMENT '时速',
-  `fx` int DEFAULT NULL COMMENT '方向',
+  `fx` int(11) DEFAULT NULL COMMENT '方向',
   `gpstime` char(14) DEFAULT NULL COMMENT 'GPS时间',
   `mid` varchar(64) DEFAULT NULL COMMENT '多媒体ID',
-  `type` int DEFAULT NULL COMMENT '多媒体类型',
-  `gs` int DEFAULT NULL COMMENT '多媒体格式',
-  `event` int DEFAULT NULL COMMENT '事件项编码',
-  `tdh` int DEFAULT NULL COMMENT '通道号',
+  `type` int(11) DEFAULT NULL COMMENT '多媒体类型',
+  `gs` int(11) DEFAULT NULL COMMENT '多媒体格式',
+  `event` int(11) DEFAULT NULL COMMENT '事件项编码',
+  `tdh` int(11) DEFAULT NULL COMMENT '通道号',
   `systime` char(14) DEFAULT NULL COMMENT '系统时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tgps_car_photo
@@ -215,16 +224,16 @@ CREATE TABLE `tgps_car_photo` (
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_cmd`;
 CREATE TABLE `tgps_cmd` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL COMMENT '指令名称',
   `type` char(1) DEFAULT '1' COMMENT '类型',
   `clazz_path` varchar(200) NOT NULL COMMENT '类路径',
   `params` varchar(2000) DEFAULT NULL COMMENT '类参数(tid不用填)',
   `enabled` char(1) NOT NULL DEFAULT '1' COMMENT '是否可用',
-  `orderindex` int DEFAULT NULL COMMENT '序号',
+  `orderindex` int(11) DEFAULT NULL COMMENT '序号',
   `remark` varchar(2000) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61491 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=61484 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tgps_cmd
@@ -238,101 +247,87 @@ INSERT INTO `tgps_cmd` VALUES ('61483', '下发文本', '1', 'com.lingx.gps31.co
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_cmd_user`;
 CREATE TABLE `tgps_cmd_user` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `cmd_id` int NOT NULL COMMENT '指令',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cmd_id` int(11) NOT NULL COMMENT '指令',
   `user_id` char(36) NOT NULL COMMENT '用户',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2364 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2356 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tgps_cmd_user
 -- ----------------------------
 INSERT INTO `tgps_cmd_user` VALUES ('2345', '61480', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
-INSERT INTO `tgps_cmd_user` VALUES ('2347', '61480', '99270b6a-33aa-4366-8272-26d2757de5bc');
-INSERT INTO `tgps_cmd_user` VALUES ('2349', '61480', '292329cf-554b-4617-8561-96a28605f5a1');
-INSERT INTO `tgps_cmd_user` VALUES ('2350', '61481', '292329cf-554b-4617-8561-96a28605f5a1');
-INSERT INTO `tgps_cmd_user` VALUES ('2352', '61481', '0a8cc074-3c4d-45da-a065-3978efb7027b');
-INSERT INTO `tgps_cmd_user` VALUES ('2353', '61481', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
 INSERT INTO `tgps_cmd_user` VALUES ('2354', '61482', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
 INSERT INTO `tgps_cmd_user` VALUES ('2355', '61483', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
-INSERT INTO `tgps_cmd_user` VALUES ('2356', '61488', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
-INSERT INTO `tgps_cmd_user` VALUES ('2357', '61487', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
-INSERT INTO `tgps_cmd_user` VALUES ('2358', '61486', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
-INSERT INTO `tgps_cmd_user` VALUES ('2360', '61484', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
-INSERT INTO `tgps_cmd_user` VALUES ('2361', '61489', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
-INSERT INTO `tgps_cmd_user` VALUES ('2362', '61490', 'b9b8a2ac-ec9c-4c53-afb9-38531ae64c79');
-INSERT INTO `tgps_cmd_user` VALUES ('2363', '61485', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
-
 
 -- ----------------------------
 -- Table structure for `tgps_group`
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_group`;
 CREATE TABLE `tgps_group` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL DEFAULT '' COMMENT '车辆分组',
-  `fid` int NOT NULL DEFAULT '0' COMMENT '上级',
+  `fid` int(11) NOT NULL DEFAULT '0' COMMENT '上级',
   `state` varchar(16) DEFAULT 'open' COMMENT '节点是否展开',
-  `orderindex` int DEFAULT '10' COMMENT '序号',
-  `type` int DEFAULT '1' COMMENT '类型',
+  `orderindex` int(11) DEFAULT '10' COMMENT '序号',
+  `type` int(11) DEFAULT '1' COMMENT '类型',
   `icon_cls` varchar(32) DEFAULT NULL COMMENT '图标',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tgps_group
 -- ----------------------------
-INSERT INTO `tgps_group` VALUES ('149', '车辆监控中心', '0', 'open', '10', '1', 'Flaggreen');
+INSERT INTO `tgps_group` VALUES ('149', '默认分组(Default Group)', '0', 'open', '10', '1', 'Flaggreen');
 
 -- ----------------------------
 -- Table structure for `tgps_group_car`
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_group_car`;
 CREATE TABLE `tgps_group_car` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `group_id` int NOT NULL COMMENT '分组',
-  `car_id` int NOT NULL COMMENT '车辆',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL COMMENT '分组',
+  `car_id` int(11) NOT NULL COMMENT '车辆',
   PRIMARY KEY (`id`),
   KEY `IDX_GID` (`group_id`),
   KEY `IDX_TID` (`car_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+-- Records of tgps_group_car
+-- ----------------------------
+INSERT INTO `tgps_group_car` VALUES ('1', '149', '1');
 
 -- ----------------------------
 -- Table structure for `tgps_group_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_group_user`;
 CREATE TABLE `tgps_group_user` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` char(36) NOT NULL COMMENT '分组',
   `user_id` char(36) NOT NULL COMMENT '用户',
   PRIMARY KEY (`id`),
   KEY `IDX_GID` (`group_id`),
   KEY `IDX_UID` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=327 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=328 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tgps_group_user
 -- ----------------------------
 INSERT INTO `tgps_group_user` VALUES ('312', '149', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
-INSERT INTO `tgps_group_user` VALUES ('321', '147', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
-INSERT INTO `tgps_group_user` VALUES ('322', '150', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae');
-INSERT INTO `tgps_group_user` VALUES ('323', '147', 'b9b8a2ac-ec9c-4c53-afb9-38531ae64c79');
-INSERT INTO `tgps_group_user` VALUES ('324', '150', '0c711a34-5cf1-4853-8e5f-c5a310e7fba8');
-INSERT INTO `tgps_group_user` VALUES ('325', '147', 'ff75cf31-f12b-4834-a6b6-ff3b0f60a261');
-INSERT INTO `tgps_group_user` VALUES ('326', '147', '1d5608f7-7795-4582-b592-69d2b3637ef4');
+INSERT INTO `tgps_group_user` VALUES ('327', '149', '0eff32cf-0840-4633-a571-b6225485a6b6');
 
 -- ----------------------------
 -- Table structure for `tgps_jt808_param`
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_jt808_param`;
 CREATE TABLE `tgps_jt808_param` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `paramid` varchar(50) DEFAULT NULL COMMENT '参数ID',
   `type` varchar(16) DEFAULT NULL COMMENT '参数类型',
   `remark` varchar(200) DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tgps_jt808_param
@@ -413,26 +408,30 @@ INSERT INTO `tgps_jt808_param` VALUES ('70', '0x0084', 'BYTE', '车牌颜色，�
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_mileage`;
 CREATE TABLE `tgps_mileage` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `car_id` int DEFAULT NULL COMMENT '车辆',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `car_id` int(11) DEFAULT NULL COMMENT '车辆',
   `lc` decimal(11,1) DEFAULT NULL COMMENT '总里程',
   `dtlc` decimal(11,1) DEFAULT NULL COMMENT '当天行驶里程',
   `create_time` char(8) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `IDX_MILEAGE` (`car_id`,`create_time`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tgps_mileage
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `tgps_status_config`
 -- ----------------------------
 DROP TABLE IF EXISTS `tgps_status_config`;
 CREATE TABLE `tgps_status_config` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL COMMENT '报警名称',
-  `bit` int NOT NULL COMMENT '状态位',
+  `bit` int(11) NOT NULL COMMENT '状态位',
   `status` char(1) DEFAULT '0' COMMENT '是否启用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tgps_status_config
@@ -484,7 +483,7 @@ CREATE TABLE `tlingx_app` (
   `status` char(1) NOT NULL DEFAULT '1' COMMENT '状态',
   `remark` varchar(1000) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_app
@@ -500,14 +499,14 @@ CREATE TABLE `tlingx_config` (
   `name` varchar(200) NOT NULL COMMENT '名称',
   `config_key` varchar(200) NOT NULL COMMENT '调用名',
   `config_value` varchar(2000) NOT NULL COMMENT '调用值',
-  `status` int NOT NULL DEFAULT '1' COMMENT '状态',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态',
   `create_time` char(14) NOT NULL COMMENT '创建时间',
   `modify_time` char(14) NOT NULL COMMENT '修改时间',
   `remark` varchar(2000) DEFAULT NULL COMMENT '备注',
   `app_id` char(36) DEFAULT '335ec1fc-1011-11e5-b7ab-74d02b6b5f61' COMMENT '应用',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_CONFIG_KEY` (`config_key`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_config
@@ -559,14 +558,14 @@ INSERT INTO `tlingx_config` VALUES ('fda5677b-c4eb-4ad5-94e7-c777ccce3505', '未
 -- ----------------------------
 DROP TABLE IF EXISTS `tlingx_config_item`;
 CREATE TABLE `tlingx_config_item` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL COMMENT '名称',
   `key1` varchar(100) NOT NULL COMMENT '键值KEY',
   `type` varchar(20) NOT NULL DEFAULT 'text' COMMENT '类型',
   `remark` varchar(500) DEFAULT NULL COMMENT '备注',
-  `orderindex` int NOT NULL DEFAULT '100' COMMENT '序号',
+  `orderindex` int(11) NOT NULL DEFAULT '100' COMMENT '序号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_config_item
@@ -602,14 +601,14 @@ CREATE TABLE `tlingx_entity` (
   `id` char(36) NOT NULL,
   `name` varchar(138) NOT NULL DEFAULT '' COMMENT '名称',
   `code` varchar(128) NOT NULL DEFAULT '' COMMENT '代码',
-  `type` tinyint NOT NULL DEFAULT '1' COMMENT '类型',
-  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态',
-  `is_ref` tinyint DEFAULT '1' COMMENT '被引用',
+  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '类型',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态',
+  `is_ref` tinyint(4) DEFAULT '1' COMMENT '被引用',
   `app_id` char(36) NOT NULL DEFAULT '61020' COMMENT '隶属应用',
   `create_time` char(14) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_ENTITY_CODE` (`code`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_entity
@@ -651,11 +650,15 @@ DROP TABLE IF EXISTS `tlingx_file`;
 CREATE TABLE `tlingx_file` (
   `id` varchar(64) NOT NULL,
   `name` varchar(200) NOT NULL COMMENT '文件名称',
-  `length` int NOT NULL COMMENT '文件长度',
+  `length` int(11) NOT NULL COMMENT '文件长度',
   `user_id` char(36) NOT NULL COMMENT '上传用户',
   `ts` char(14) NOT NULL COMMENT '上传时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tlingx_file
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `tlingx_func`
@@ -666,12 +669,12 @@ CREATE TABLE `tlingx_func` (
   `name` varchar(64) NOT NULL DEFAULT '' COMMENT '名称',
   `module` varchar(64) NOT NULL DEFAULT '' COMMENT '模块',
   `func` varchar(32) NOT NULL DEFAULT '' COMMENT '功能',
-  `type` int NOT NULL COMMENT '类型',
+  `type` int(11) NOT NULL COMMENT '类型',
   `fid` char(36) NOT NULL COMMENT '上级',
   `state` varchar(16) NOT NULL DEFAULT 'close' COMMENT '状态',
   PRIMARY KEY (`id`),
   KEY `index_tfunc_m_f` (`module`,`func`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_func
@@ -924,13 +927,17 @@ INSERT INTO `tlingx_func` VALUES ('tlingx_user_role-view', '用户角色-查看�
 -- ----------------------------
 DROP TABLE IF EXISTS `tlingx_login_log`;
 CREATE TABLE `tlingx_login_log` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` varchar(64) NOT NULL COMMENT '用户',
   `ip` varchar(100) NOT NULL DEFAULT '' COMMENT 'IP',
   `message` varchar(64) NOT NULL COMMENT '状态',
   `ts` char(14) NOT NULL DEFAULT '' COMMENT '时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=739 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=762 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tlingx_login_log
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `tlingx_menu`
@@ -940,18 +947,18 @@ CREATE TABLE `tlingx_menu` (
   `id` char(36) NOT NULL,
   `name` varchar(200) NOT NULL COMMENT '名称',
   `short_name` varchar(100) DEFAULT NULL COMMENT '简称',
-  `type` int NOT NULL DEFAULT '1' COMMENT '类型',
+  `type` int(11) NOT NULL DEFAULT '1' COMMENT '类型',
   `icon_cls` varchar(200) DEFAULT NULL COMMENT '图标',
   `fid` char(36) NOT NULL COMMENT '上级',
-  `orderindex` int NOT NULL DEFAULT '100' COMMENT '序号',
-  `status` int NOT NULL DEFAULT '1' COMMENT '状态',
+  `orderindex` int(11) NOT NULL DEFAULT '100' COMMENT '序号',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态',
   `state` varchar(16) DEFAULT NULL COMMENT '展开',
   `func_id` char(36) DEFAULT NULL COMMENT '功能',
   `remark` varchar(128) DEFAULT NULL COMMENT '备注',
   `link_func_ids` text,
   `link_apicodes` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_menu
@@ -1005,7 +1012,7 @@ INSERT INTO `tlingx_menu` VALUES ('efb6da81-44cd-41cd-826d-f519844bb9fd', '里�
 -- ----------------------------
 DROP TABLE IF EXISTS `tlingx_message`;
 CREATE TABLE `tlingx_message` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `content` varchar(2000) NOT NULL COMMENT '内容',
   `to_user_id` char(36) NOT NULL COMMENT '接收用户',
   `from_user_id` char(36) NOT NULL COMMENT '发送用户',
@@ -1018,7 +1025,11 @@ CREATE TABLE `tlingx_message` (
   `read_time` char(14) DEFAULT NULL COMMENT '查阅时间',
   PRIMARY KEY (`id`),
   KEY `IDX_TO_USERID` (`to_user_id`,`is_push`)
-) ENGINE=InnoDB AUTO_INCREMENT=276 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tlingx_message
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `tlingx_model`
@@ -1029,7 +1040,7 @@ CREATE TABLE `tlingx_model` (
   `model` longblob NOT NULL COMMENT '模型',
   `ts` char(14) NOT NULL COMMENT '时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_model
@@ -1068,16 +1079,20 @@ INSERT INTO `tlingx_model` VALUES ('tlingx_user_role', 0xACED000573720022636F6D2
 -- ----------------------------
 DROP TABLE IF EXISTS `tlingx_operate_log`;
 CREATE TABLE `tlingx_operate_log` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` char(36) NOT NULL COMMENT '操作者',
   `content` varchar(128) NOT NULL COMMENT '详情',
   `ip` varchar(100) NOT NULL COMMENT 'IP',
   `ts` char(14) NOT NULL COMMENT '操作时间',
   `req` varchar(1000) DEFAULT NULL COMMENT '请求报文',
   `res` varchar(1000) DEFAULT NULL COMMENT '回复报文',
-  `use_time` int DEFAULT NULL COMMENT ' 耗时',
+  `use_time` int(11) DEFAULT NULL COMMENT ' 耗时',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10346 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=10354 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tlingx_operate_log
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `tlingx_option`
@@ -1091,7 +1106,7 @@ CREATE TABLE `tlingx_option` (
   `create_time` char(14) NOT NULL DEFAULT '20150101010101' COMMENT '创建时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `INDEX_CODE_TOPTION` (`code`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_option
@@ -1178,10 +1193,10 @@ CREATE TABLE `tlingx_optionitem` (
   `name` varchar(200) NOT NULL DEFAULT '' COMMENT '名称',
   `value` varchar(200) DEFAULT '' COMMENT '值',
   `option_id` char(36) NOT NULL COMMENT '选项',
-  `orderindex` int NOT NULL COMMENT '序号',
-  `enabled` int NOT NULL DEFAULT '1' COMMENT '可用性',
+  `orderindex` int(11) NOT NULL COMMENT '序号',
+  `enabled` int(11) NOT NULL DEFAULT '1' COMMENT '可用性',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_optionitem
@@ -1490,10 +1505,10 @@ CREATE TABLE `tlingx_org` (
   `fid` char(36) NOT NULL COMMENT '上级',
   `state` varchar(16) NOT NULL DEFAULT '' COMMENT '状态',
   `icon_cls` varchar(16) DEFAULT 'Group' COMMENT '图标',
-  `orderindex` int NOT NULL DEFAULT '10' COMMENT '序号',
+  `orderindex` int(11) NOT NULL DEFAULT '10' COMMENT '序号',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_ORG_CODE` (`code`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_org
@@ -1512,16 +1527,16 @@ CREATE TABLE `tlingx_role` (
   `id` char(36) NOT NULL,
   `name` varchar(200) NOT NULL DEFAULT '' COMMENT '名称',
   `code` varchar(64) DEFAULT NULL COMMENT '代码',
-  `orderindex` int NOT NULL DEFAULT '10' COMMENT '序号',
+  `orderindex` int(11) NOT NULL DEFAULT '10' COMMENT '序号',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_ROLE_CODE` (`code`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_role
 -- ----------------------------
-INSERT INTO `tlingx_role` VALUES ('6e0362e8-100e-11e5-b7ab-74d02b6b5f61', '管理员', 'admin', '1');
-INSERT INTO `tlingx_role` VALUES ('be649cf6-bf66-43c6-a3b0-4444c28abb6c', '普通用户', 'user', '10');
+INSERT INTO `tlingx_role` VALUES ('6e0362e8-100e-11e5-b7ab-74d02b6b5f61', '管理员(Admin)', 'admin', '1');
+INSERT INTO `tlingx_role` VALUES ('be649cf6-bf66-43c6-a3b0-4444c28abb6c', '普通用户(User)', 'user', '10');
 
 -- ----------------------------
 -- Table structure for `tlingx_role_api`
@@ -1533,7 +1548,7 @@ CREATE TABLE `tlingx_role_api` (
   `apicode` varchar(64) NOT NULL COMMENT '接口代码',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_ROLE_API` (`role_id`,`apicode`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_role_api
@@ -1834,7 +1849,7 @@ CREATE TABLE `tlingx_role_func` (
   `func_id` varchar(64) NOT NULL COMMENT ' 功能',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_TLINGX_ROLEFUNC` (`role_id`,`func_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_role_func
@@ -2178,7 +2193,6 @@ INSERT INTO `tlingx_role_func` VALUES ('fc03faa8-3666-11ec-a486-489ebd244b0f', '
 INSERT INTO `tlingx_role_func` VALUES ('fc3720e0-3666-11ec-a486-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'fa2dc68e-158f-11e5-be1c-74d02b6b5f61');
 INSERT INTO `tlingx_role_func` VALUES ('fc52c283-3666-11ec-a486-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'fb0d148b-19dd-11e7-bec0-74d02b6b5f61');
 INSERT INTO `tlingx_role_func` VALUES ('3e5e05ff-145a-11f0-aa13-5254000e253c', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'tgps_group-del');
-INSERT INTO `tlingx_role_func` VALUES ('3ec90493-145a-11f0-aa13-5254000e253c', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'tgps_group-tree');
 INSERT INTO `tlingx_role_func` VALUES ('345bbcf0-ab3d-11ed-a107-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'tlingx_config-reload');
 INSERT INTO `tlingx_role_func` VALUES ('fc4a6ab5-3666-11ec-a486-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'tlingx_func-combotree');
 INSERT INTO `tlingx_role_func` VALUES ('fc4ab50a-3666-11ec-a486-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'tlingx_func-del');
@@ -2237,7 +2251,7 @@ CREATE TABLE `tlingx_role_menu` (
   `menu_id` char(36) NOT NULL COMMENT '菜单',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_TLINGX_ROLEMENU` (`role_id`,`menu_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_role_menu
@@ -2295,17 +2309,13 @@ INSERT INTO `tlingx_role_menu` VALUES ('465e9fbe-1238-11ed-9ed5-489ebd244b0f', '
 INSERT INTO `tlingx_role_menu` VALUES ('af8981c3-7d1c-11ec-ac5d-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '493930be-8f9a-438e-af67-392b8f01ebf7');
 INSERT INTO `tlingx_role_menu` VALUES ('bccba9d2-1e0b-11ed-9e0e-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '5ab03daa-eb5d-429f-abe3-fae6f51c398c');
 INSERT INTO `tlingx_role_menu` VALUES ('e8040764-1303-11ed-9c6d-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '611b1401-8b14-42be-9741-dba30fe0a77d');
-INSERT INTO `tlingx_role_menu` VALUES ('6fb356af-4ffa-11ec-988a-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '623a0799-b309-4488-8ab7-bc50a0875d04');
-INSERT INTO `tlingx_role_menu` VALUES ('79ef324b-4ffa-11ec-988a-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '85961096-2fda-4a8e-9513-89ab2cf80acd');
 INSERT INTO `tlingx_role_menu` VALUES ('b8f29827-12d7-11ed-9c6d-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '8a0060a1-292f-4217-b0f9-b133be8b6aaf');
 INSERT INTO `tlingx_role_menu` VALUES ('3ce9e87d-510b-11ec-988a-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '93098039-22f4-4959-8933-80585f87b13d');
 INSERT INTO `tlingx_role_menu` VALUES ('9ad5f040-5105-11ec-988a-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '97a2bbac-9cf1-4ef6-9e2d-0f0f0793a45f');
-INSERT INTO `tlingx_role_menu` VALUES ('08071e53-afca-11ec-9bd8-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'a43514af-293a-4a1c-9265-8a5eb86f570f');
 INSERT INTO `tlingx_role_menu` VALUES ('9eeb3ac1-7d1c-11ec-ac5d-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'ac8b1aba-4065-4fef-9a75-865de64c6919');
 INSERT INTO `tlingx_role_menu` VALUES ('de78446b-1246-11ed-9ed5-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'c143d391-2f3e-46d8-ad12-90310fbf5ac3');
 INSERT INTO `tlingx_role_menu` VALUES ('128785b9-5bac-11ef-8317-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'cbc9ab7e-31d0-4354-bcd3-00b1e6e5a384');
 INSERT INTO `tlingx_role_menu` VALUES ('d9f8a8a7-3667-11ec-a486-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'cc575f33-1301-11e5-b8aa-74d02b6b5f61');
-INSERT INTO `tlingx_role_menu` VALUES ('8523c3cc-4ffa-11ec-988a-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'defb11ad-dd97-4254-9a2a-a851cb1ea041');
 INSERT INTO `tlingx_role_menu` VALUES ('f9940730-989d-11ec-abf1-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'e966e94e-be63-430b-a2d7-776f01db0ab8');
 INSERT INTO `tlingx_role_menu` VALUES ('f86934ac-1166-11ed-9ed5-489ebd244b0f', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', 'efb6da81-44cd-41cd-826d-f519844bb9fd');
 
@@ -2314,7 +2324,7 @@ INSERT INTO `tlingx_role_menu` VALUES ('f86934ac-1166-11ed-9ed5-489ebd244b0f', '
 -- ----------------------------
 DROP TABLE IF EXISTS `tlingx_schedule`;
 CREATE TABLE `tlingx_schedule` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(1000) NOT NULL COMMENT '调度名称',
   `type` char(1) NOT NULL COMMENT '类型',
   `status` char(1) NOT NULL COMMENT '状态',
@@ -2327,22 +2337,23 @@ CREATE TABLE `tlingx_schedule` (
   `create_time` char(14) DEFAULT NULL COMMENT '创建时间',
   `modify_time` char(14) DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_schedule
 -- ----------------------------
+
 -- ----------------------------
 -- Table structure for `tlingx_schedule_log`
 -- ----------------------------
 DROP TABLE IF EXISTS `tlingx_schedule_log`;
 CREATE TABLE `tlingx_schedule_log` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `schedule_id` int DEFAULT NULL COMMENT '任务',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `schedule_id` int(11) DEFAULT NULL COMMENT '任务',
   `ret` varchar(500) DEFAULT NULL COMMENT '执行消息',
   `ts` char(14) DEFAULT NULL COMMENT '执行时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_schedule_log
@@ -2353,7 +2364,7 @@ CREATE TABLE `tlingx_schedule_log` (
 -- ----------------------------
 DROP TABLE IF EXISTS `tlingx_update_log`;
 CREATE TABLE `tlingx_update_log` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `version` varchar(100) NOT NULL COMMENT '版本号',
   `comment` varchar(2000) DEFAULT NULL COMMENT '更新说明',
   `type` char(1) NOT NULL COMMENT '类型,1是常规更新，2是特殊功能',
@@ -2363,7 +2374,7 @@ CREATE TABLE `tlingx_update_log` (
   `create_time` char(14) NOT NULL COMMENT '创建时间',
   `update_time` char(14) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_update_log
@@ -2378,25 +2389,26 @@ CREATE TABLE `tlingx_user` (
   `account` varchar(32) NOT NULL DEFAULT '' COMMENT '登录账号',
   `name` varchar(64) NOT NULL DEFAULT '' COMMENT '姓名',
   `password` varchar(64) NOT NULL DEFAULT '' COMMENT '密码',
-  `status` int NOT NULL DEFAULT '1' COMMENT '状态',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态',
   `tel` varchar(64) DEFAULT '' COMMENT '电话',
   `email` varchar(64) DEFAULT '' COMMENT '电子邮件',
-  `login_count` int NOT NULL DEFAULT '0' COMMENT '登陆次数',
+  `login_count` int(11) NOT NULL DEFAULT '0' COMMENT '登陆次数',
   `last_login_time` char(14) DEFAULT NULL COMMENT '最后登录时间',
   `last_login_ip` varchar(100) DEFAULT NULL COMMENT '最后登录IP',
   `create_time` char(14) NOT NULL COMMENT '创建时间',
   `modify_time` char(14) NOT NULL COMMENT '修改时间',
-  `orderindex` int DEFAULT '100' COMMENT '序号',
+  `orderindex` int(11) DEFAULT '100' COMMENT '序号',
   `remark` varchar(1000) DEFAULT NULL COMMENT '备注',
   `user_id` char(36) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `INDEX_ACCOUNT_TUSER` (`account`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_user
 -- ----------------------------
-INSERT INTO `tlingx_user` VALUES ('43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae', 'admin', 'Admin', '192b45b6b670e75212cd4e54e9da92d621232f297a57a5a743894a0e4a801fc3', '1', '', '', '3133', '20250410135113', '120.41.173.35', '20150425121212', '20170613220745', '1', '', null);
+INSERT INTO `tlingx_user` VALUES ('0eff32cf-0840-4633-a571-b6225485a6b6', 'demo', 'demo', '8b78749b96f681a4d814ea2be2dc8ce9fe01ce2a7fbac8fafaed7c982a04e229', '1', '', '', '6', '20250417161730', '127.0.0.1', '20250411234041', '20250411234041', '100', '', null);
+INSERT INTO `tlingx_user` VALUES ('43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae', 'admin', 'Admin', '192b45b6b670e75212cd4e54e9da92d621232f297a57a5a743894a0e4a801fc3', '1', '', '', '3150', '20250417161747', '127.0.0.1', '20150425121212', '20170613220745', '1', '', null);
 
 -- ----------------------------
 -- Table structure for `tlingx_user_func`
@@ -2408,7 +2420,7 @@ CREATE TABLE `tlingx_user_func` (
   `func_id` char(36) NOT NULL COMMENT '功能',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_TLINGX_USERID_FUNCID` (`user_id`,`func_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_user_func
@@ -2424,7 +2436,7 @@ CREATE TABLE `tlingx_user_menu` (
   `menu_id` char(36) NOT NULL COMMENT '菜单',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_TLINGX_USERID_MENUID` (`user_id`,`menu_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_user_menu
@@ -2440,13 +2452,12 @@ CREATE TABLE `tlingx_user_org` (
   `org_id` char(36) NOT NULL COMMENT '组织',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_TLINGX_USER_ORG` (`user_id`,`org_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_user_org
 -- ----------------------------
-INSERT INTO `tlingx_user_org` VALUES ('5904110c-15cc-11f0-aa13-5254000e253c', '1d5608f7-7795-4582-b592-69d2b3637ef4', '6689ae6a-140f-11e5-b650-74d02b6b5f61');
-INSERT INTO `tlingx_user_org` VALUES ('38344231-15cc-11f0-aa13-5254000e253c', 'ff75cf31-f12b-4834-a6b6-ff3b0f60a261', '6689ae6a-140f-11e5-b650-74d02b6b5f61');
+INSERT INTO `tlingx_user_org` VALUES ('64dc1354-16eb-11f0-b3d1-489ebd244b0f', '0eff32cf-0840-4633-a571-b6225485a6b6', '6689ae6a-140f-11e5-b650-74d02b6b5f61');
 
 -- ----------------------------
 -- Table structure for `tlingx_user_role`
@@ -2458,14 +2469,13 @@ CREATE TABLE `tlingx_user_role` (
   `role_id` char(36) NOT NULL COMMENT '角色',
   `org_id` char(36) NOT NULL COMMENT '组织',
   `type` char(1) NOT NULL DEFAULT '1' COMMENT '类型',
-  `orderindex` int NOT NULL DEFAULT '1' COMMENT '序号',
+  `orderindex` int(11) NOT NULL DEFAULT '1' COMMENT '序号',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNI_TLINGX_USERROLE` (`user_id`,`role_id`,`org_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tlingx_user_role
 -- ----------------------------
 INSERT INTO `tlingx_user_role` VALUES ('7d73fe31-103e-11e5-b7ab-74d02b6b5f61', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae', '6e0362e8-100e-11e5-b7ab-74d02b6b5f61', 'c8a807f2-9cee-4384-9a41-daf17073b997', '1', '1');
-INSERT INTO `tlingx_user_role` VALUES ('a0d5765d-abce-4fd8-9ec2-0cebc522d06e', 'ff75cf31-f12b-4834-a6b6-ff3b0f60a261', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '6689ae6a-140f-11e5-b650-74d02b6b5f61', '1', '100');
-INSERT INTO `tlingx_user_role` VALUES ('dbdeb160-abe3-4274-a78f-c7817d1b9f91', '1d5608f7-7795-4582-b592-69d2b3637ef4', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '6689ae6a-140f-11e5-b650-74d02b6b5f61', '1', '100');
+INSERT INTO `tlingx_user_role` VALUES ('aa2c8936-ccea-4a20-99eb-1037915c3b92', '0eff32cf-0840-4633-a571-b6225485a6b6', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '6689ae6a-140f-11e5-b650-74d02b6b5f61', '1', '100');

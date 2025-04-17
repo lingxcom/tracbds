@@ -180,6 +180,7 @@ SIM号码=SIM
 终端设备不在线=Device is not online
 
 登录成功=Login succeeded
+Token登录成功=Token login succeeded
 账号或密码错误=Account or password error
 
 登录失败，IP不在白名单之内=Login failed, IP is not on the whitelist

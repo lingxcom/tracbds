@@ -85,9 +85,16 @@ IP：47.100.112.218
 
 # 开源版演示地址
 
-https://demo.tracbds.com
+https://tracbds.lingx.com
 
 ![index](readme/20250415103210.png "index.png")
 ![index](readme/20250415105433.png "index.png")
 ![index](readme/20250415105558.png "index.png")
 ![index](readme/20250415105834.png "index.png")
+
+![index](readme/20250417163438.png "index.png")
+![index](readme/20250417163533.png "index.png")
+![index](readme/20250417163558.png "index.png")
+![index](readme/20250417163652.png "index.png")
+![index](readme/20250417163732.png "index.png")
+![index](readme/20250417163814.png "index.png")

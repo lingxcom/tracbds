@@ -28,7 +28,7 @@ import com.tracbds.server.swing.dialog.DialogInitializeDatabase;
 public class TracbdsFrame extends JFrame {
 
 
-	public static String configFile="spring_dev.xml" ;
+	public static String configFile="spring.xml" ;
 	private ConfigurableApplicationContext context ;
 	public TracbdsFrame() {
 		super("Tracbds - http://www.lingx.com");
@@ -62,7 +62,7 @@ public class TracbdsFrame extends JFrame {
     	JButton startButton = new JButton("启动(Start)");
         JButton  stopButton = new JButton("停止(Stop)");
         JButton  dbButton = new JButton("连接数据库(Init Database)");
-        JButton  getButton = new JButton("购买设备(Buy Device)");
+        JButton  getButton = new JButton("商业版(Ultimate Edition)");
     	startButton.setIcon(icon1);
         stopButton.setIcon(icon2);
 
