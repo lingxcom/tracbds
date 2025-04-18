@@ -1,7 +1,5 @@
 package com.tracbds.server.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -14,7 +12,8 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.tracbds.core.service.JT808CommonService;
+import com.lingx.service.LingxService;
+import com.tracbds.core.IJT808Cache;
 import com.tracbds.core.utils.Utils;
 
 @Component
@@ -30,6 +29,9 @@ public class JT808DataService {
 	private String autoadd="true";
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	private LingxService lingxService;
 	/**
 	 * 允许上报的设备ID
 	 */
@@ -193,40 +195,25 @@ public class JT808DataService {
 	public void updateCar(Map<String, Object> map, boolean isAutoAdd) {
 		long status = Long.parseLong(map.get("status").toString());
 		String sql = "update tgps_car set online='1', acc=?,location=?,alarm=?,status=?,lat=?,lng=?,height=?,speed=?,direction=?,mileage=?,gpstime=?,systime=? where id=?";
-		int c = this.jdbcTemplate.update(sql, (status & 0b01) > 0 ? "1" : "0", (status & 0b10) > 0 ? "1" : "0",
+		this.jdbcTemplate.update(sql, (status & 0b01) > 0 ? "1" : "0", (status & 0b10) > 0 ? "1" : "0",
 				map.get("alarm"), map.get("status"), map.get("lat"), map.get("lng"), map.get("height"),
 				map.get("speed"), map.get("direction"), map.get("A01"), map.get("gpstime"), Utils.getTime(),
 				map.get("car_id"));
-		if (c == 0 && isAutoAdd) {
-			this.addCar(map.get("tid").toString());
-		}
+		
 	}
 	
-	private void addCar(String tid) {
-		if (!"true".equals(this.autoadd))
-			return;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-		try {
-			Date sdate = new Date();
-			Date edate = new Date();
-			edate.setYear(edate.getYear() + 1);
-			String time = Utils.getTime();
-			this.jdbcTemplate.update(
-					"insert into tgps_car(tid,carno,color,sim,stime,etime,create_time,modify_time,online) values(?,?,?,?,?,?,?,?,'1')",
-					tid, tid, 0, tid, sdf.format(sdate), sdf.format(edate), time, time);
-			int car_id=this.jdbcTemplate.queryForObject("select id from tgps_car where tid=?", Integer.class,tid);
-			this.jdbcTemplate.update("insert into tgps_group_car(group_id,car_id) values(?,?)", 147, car_id);
-			this.jdbcTemplate.update("delete from tgps_car_tdh where car_id=?",car_id);
-			String channels[]=new String[] {"1","2","3","4"};
-			for (String temp22 : channels) {
-				this.jdbcTemplate.update("insert into tgps_car_tdh(car_id,tdh,name)values(?,?,?)", car_id,
-						temp22.replace("CH-", ""), temp22);
-			}
-			tid = null;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void addCar(String tid) {
+		tid=tid.trim();
+		while (tid.charAt(0) == '0') {
+			tid = tid.substring(1);
 		}
+		String time = Utils.getTime();
+		String ets = this.lingxService.getTime(1, 1);
+		String sql = "insert into tgps_car(tid,carno,sim,czxm,tel,remark,version,create_time,modify_time,stime,etime)values(?,?,?,?,?,?,?,?,?,?,?)";
+		this.jdbcTemplate.update(sql, tid, tid, "","", "", "", "", time, time,
+				time.substring(0, 8), ets.substring(0, 8));
+		int car_id=this.jdbcTemplate.queryForObject("select id from tgps_car where tid=?", Integer.class,tid);
+		IJT808Cache.WHITE_LIST.put(tid, String.valueOf(car_id));
 	}
 
 }

@@ -7,12 +7,13 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import com.lingx.utils.PropUtils;
+import com.tracbds.server.AppUI;
 
 public class CustomPropertyConfigurer extends PropertySourcesPlaceholderConfigurer {
 
 	@Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-
+		if(!AppUI.isAppUI)return;//不是从GUI启动，不做这些处理
         String ip=PropUtils.getProp("tracbds.database.ip","127.0.0.1");
         String port=PropUtils.getProp("tracbds.database.port","3306");
         String username=PropUtils.getProp("tracbds.database.username","root");

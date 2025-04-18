@@ -55,6 +55,10 @@ public class Api1163 extends AbstractAuthApi implements IApi {
 			String czxm = this.getParamString(params, "czxm", "");
 			String tel = this.getParamString(params, "tel", "");
 			String remark = this.getParamString(params, "remark", "");
+			tid=tid.trim();
+			while (tid.charAt(0) == '0') {
+				tid = tid.substring(1);
+			}
 			int c=lingxService.queryForInt("select count(*) from tgps_car where tid=?",tid);
 			if(c>0){
 				ret.put("code", -1);
@@ -95,6 +99,7 @@ public class Api1163 extends AbstractAuthApi implements IApi {
 		String ets = this.lingxService.getTime(1, 1);
 		for (String tid : array) {
 			if(Utils.isNull(tid))continue;
+			tid=tid.trim();
 			while (tid.charAt(0) == '0') {
 				tid = tid.substring(1);
 			}

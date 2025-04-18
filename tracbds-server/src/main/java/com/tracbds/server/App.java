@@ -11,7 +11,7 @@ public class App {
 
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
-				new String[] {"spring.xml" });
+				new String[] {"application.xml" });
 		 StartupService bean=context.getBean(StartupService.class);
 		 bean.startup();
 	}

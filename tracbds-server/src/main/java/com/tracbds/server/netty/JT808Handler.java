@@ -23,6 +23,7 @@ import com.tracbds.core.support.MyByteBuf;
 import com.tracbds.core.utils.JT808Utils;
 import com.tracbds.core.utils.Utils;
 import com.tracbds.server.netty.websocket.WebsocketUtils;
+import com.tracbds.server.service.JT808DataService;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -43,7 +44,8 @@ public class JT808Handler extends SimpleChannelInboundHandler<byte[]> {
 	private List<IJT808MsgHandler> listMsgHandler;
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-
+	@Autowired
+	private JT808DataService jt808DataService;
 	private Set<Integer> nores8001 = new HashSet<>();
 
 	@PostConstruct
@@ -86,6 +88,7 @@ public class JT808Handler extends SimpleChannelInboundHandler<byte[]> {
 
 			if (!IJT808Cache.WHITE_LIST.containsKey(tid)) {
 				log.info("设备号未注册:{}", tid);
+				jt808DataService.addCar(tid);
 				return;
 			}
 

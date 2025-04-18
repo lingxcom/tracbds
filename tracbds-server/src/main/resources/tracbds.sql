@@ -2479,3 +2479,11 @@ CREATE TABLE `tlingx_user_role` (
 -- ----------------------------
 INSERT INTO `tlingx_user_role` VALUES ('7d73fe31-103e-11e5-b7ab-74d02b6b5f61', '43b2f84b-6e2d-4c4a-87d6-ab67e8c883ae', '6e0362e8-100e-11e5-b7ab-74d02b6b5f61', 'c8a807f2-9cee-4384-9a41-daf17073b997', '1', '1');
 INSERT INTO `tlingx_user_role` VALUES ('aa2c8936-ccea-4a20-99eb-1037915c3b92', '0eff32cf-0840-4633-a571-b6225485a6b6', 'be649cf6-bf66-43c6-a3b0-4444c28abb6c', '6689ae6a-140f-11e5-b650-74d02b6b5f61', '1', '100');
+CREATE TABLE `tgps_car_tdh` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `car_id` varchar(64) NOT NULL COMMENT '隶属车辆',
+  `tdh` int(11) NOT NULL COMMENT '通道号',
+  `name` varchar(255) NOT NULL COMMENT '名称',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNI_CAR_TDH` (`car_id`,`tdh`)
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
