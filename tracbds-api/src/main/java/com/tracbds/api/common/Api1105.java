@@ -62,7 +62,7 @@ public class Api1105 extends AbstractAuthApi implements IApi{
 		String speedStop=IApi.getParamString(params, "speedStop", "10");//停车时速，小于这个时速算停车
 		String invalid =IApi.getParamString(params, "invalid", "");
 		String alarm =IApi.getParamString(params, "alarm", "");//tgps_car_alarm
-		String dilution=IApi.getParamString(params, "dilution", "100");//抽稀公里数，默认100米
+		String dilution=IApi.getParamString(params, "dilution", "");//抽稀公里数，默认100米
 		String language=IApi.getParamString(params, "language", "zh-CN");
 		stime=SQLUtils.getValue(stime);
 		etime=SQLUtils.getValue(etime);
@@ -75,7 +75,7 @@ public class Api1105 extends AbstractAuthApi implements IApi{
 		long st=System.currentTimeMillis();
 		List<Map<String,Object>> list=this.getHistoryList(car_id, stime, etime, where);
 		//System.out.println("从数据库读取历史轨迹数据，用时:"+(System.currentTimeMillis()-st)+" ms");
-
+		
 		List<Map<String,Object>> listStops=this.handlerStops(list,Integer.valueOf(timeStop),Integer.valueOf(speedStop));
 		
 		ret.put("stops", listStops);
@@ -86,8 +86,11 @@ public class Api1105 extends AbstractAuthApi implements IApi{
 	                return map1.get("gpstime").toString().compareTo(map2.get("gpstime").toString()) ;
 	            }
 	        });
-		 
-		//抽稀处理
+
+			//抽稀处理
+		 if(Utils.isNotNull(dilution)) {
+				list=dilutionExec(list,dilution);
+			}
 		
 		//System.out.println("设置偏移经纬度，用时:"+(System.currentTimeMillis()-st)+" ms");
 		this.commonService.setStatusAlarmString(list,language);
@@ -405,7 +408,33 @@ public class Api1105 extends AbstractAuthApi implements IApi{
 		}
 		return date.getTime();
 	}
-
+	/**
+	 * 
+	 * @param list
+	 * @param dilution 公里
+	 * @return
+	 */
+	private List<Map<String,Object>> dilutionExec(List<Map<String,Object>> list,String dilution){
+		double distance1=Double.parseDouble(dilution)*1000;
+		List<Map<String,Object>> listNew=new ArrayList<>();
+		int j=0;
+		for(int i=0;i<list.size();i++) {
+			if(i==0) {
+				listNew.add(list.get(i));
+			}else if(i==(list.size()-1)) {
+				listNew.add(list.get(i));
+			}else {
+				if(j==0)j=i;
+				if(this.getJL(list.get(j), list.get(i+1))>=distance1) {
+					listNew.add(list.get(j));
+					j=0;
+				}
+			}
+		}
+		list.clear();
+		list=null;
+		return listNew;
+	}
 	static class StopLatlngUtils{
 		private static Map<String,Integer> mapStop=new HashMap<>();
 		 

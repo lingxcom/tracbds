@@ -10,14 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.lingx.web.ILingxThread;
 import com.tracbds.core.IJT808Cache;
-import com.tracbds.core.service.JT808AlarmService;
 import com.tracbds.core.service.JT808CommonService;
 import com.tracbds.core.utils.Utils;
 import com.tracbds.server.netty.websocket.WebSocketHandler;
 import com.tracbds.server.netty.websocket.api.WebSocketApi1005;
 import com.tracbds.server.service.JT808DataService;
-import com.lingx.web.ILingxThread;
 
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -31,8 +30,8 @@ public class JT8080x0200Handler implements Runnable,ILingxThread {
 	
 	@Autowired
 	private JT808DataService databaseService;
-	@Autowired
-	private JT808AlarmService alarmService;
+	//@Autowired
+	//private JT808AlarmService alarmService;
 	@Autowired
 	private JT808CommonService commonService;
 	@Override
@@ -41,17 +40,13 @@ public class JT8080x0200Handler implements Runnable,ILingxThread {
 	}
 		@Override
 	public void run() {
-		String json=null;
+			Map<String,Object> map;
 		try {
 		while(isRun) {
-				json=IJT808Cache.GPS_DATA_QUEUE.poll();
-				if(Utils.isNotNull(json)) {
-					Map<String,Object> map=(Map<String,Object>)JSON.parse(json);
+			map=IJT808Cache.GPS_DATA_QUEUE.poll();
+				if(map!=null) {
 					if(map.get("car_id")==null) {
 						log.error("JT8080x0200Handler中car_id为空");
-						log.error(json);
-						System.out.println("JT8080x0200Handler中car_id为空");
-						System.out.println(json);
 						continue;
 					}
 					String car_id=map.get("car_id").toString();
@@ -79,7 +74,7 @@ public class JT8080x0200Handler implements Runnable,ILingxThread {
 					
 					String lastJson=IJT808Cache.get(car_id);
 					
-					this.alarmService.saveData(car_id, Long.parseLong(map.get("alarm").toString()), map);
+					//this.alarmService.saveData(car_id, Long.parseLong(map.get("alarm").toString()), map);
 					Map<String,Object> lastMap=null;
 					if(lastJson!=null)lastMap=(Map<String,Object>)JSON.parse(lastJson);
 					else {
@@ -95,7 +90,7 @@ public class JT8080x0200Handler implements Runnable,ILingxThread {
 						//行驶或停止变动时间
 						IJT808Cache.set(car_id+"_speed_change", Utils.getTime());
 					}
-					this.databaseService.save0200(JSON.parseObject(JSON.toJSONString(map)));
+					this.databaseService.save0200(map);//(JSON.parseObject(JSON.toJSONString(map)));//
 					if(lastMap!=map) {//由于缓存与推送到前端需要部分数据库字段，所以要覆盖下
 						lastMap.remove("status_str");//移除旧的状态与报警
 						lastMap.remove("alarm_str");//移除旧的状态与报警
@@ -104,7 +99,7 @@ public class JT8080x0200Handler implements Runnable,ILingxThread {
 					}
 					this.pushWebSocket(car_id,map);//JSON.toJSONString(map);
 					IJT808Cache.set(car_id, JSON.toJSONString(map));//设置最新数据，供业务系统调取
-					map.clear();
+					//map.clear();//不清空，其他地方还有引用
 					map=null;
 				}else {
 					Thread.currentThread().sleep(10);
@@ -113,8 +108,6 @@ public class JT8080x0200Handler implements Runnable,ILingxThread {
 			}
 		} catch (Exception e) {
 			log.error("0x0200入库线程退出。。。");
-			log.error(json);
-			System.out.println(json);
 			e.printStackTrace();
 		}
 	}

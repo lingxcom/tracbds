@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.druid.util.StringUtils;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.lingx.service.LingxService;
@@ -125,8 +126,8 @@ public class JT808DataService {
 	 * 媒体文件上报
 	 */
 	public void save0801(Map<String, Object> map) {
-		String sql="insert into tgps_car_photo(tid,path,acc,lat,lng,speed,fx,gpstime,mid,type,gs,event,tdh,systime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		this.jdbcTemplate.update(sql,map.get("tid"),map.get("filepath"),map.get("acc"),map.get("lat"),map.get("lng"),map.get("speed"),map.get("direction"),map.get("gpstime"),
+		String sql="insert into tgps_car_photo(car_id,path,acc,lat,lng,speed,fx,gpstime,mid,type,gs,event,tdh,systime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		this.jdbcTemplate.update(sql,map.get("car_id"),map.get("filepath"),map.get("acc"),map.get("lat"),map.get("lng"),map.get("speed"),map.get("direction"),map.get("gpstime"),
 				map.get("p1"),map.get("p2"),map.get("p3"),map.get("p4"),map.get("p5"),Utils.getTime());
 	}
 	
@@ -203,6 +204,7 @@ public class JT808DataService {
 	}
 	
 	public void addCar(String tid) {
+		if(!StringUtils.isNumber(tid))return;
 		tid=tid.trim();
 		while (tid.charAt(0) == '0') {
 			tid = tid.substring(1);

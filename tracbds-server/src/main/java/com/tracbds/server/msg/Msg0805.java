@@ -33,7 +33,6 @@ public class Msg0805 extends AbstrctMsgHandler implements IJT808MsgHandler {
 		
 		String key=JT808Utils.getResKey(tid, 0x8801, resMsgSn);
 		IJT808Cache.cache(key, JT808Utils.getResBeanAndToString(ret,sb.toString()), 10);
-		mbuff.release();
 		mbuff=null;
 	}
 

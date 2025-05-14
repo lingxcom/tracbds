@@ -123,8 +123,6 @@ public class JT808Handler extends SimpleChannelInboundHandler<byte[]> {
 						IJT808Cache.FB_CACHE.put(key, bigBuff);
 					}
 					// 因为要return 在这里释放
-					content.release();
-					buff.release();
 					return;
 				} else if (ind == max) {
 					if (IJT808Cache.FB_CACHE.getIfPresent(key) == null) {
@@ -148,8 +146,6 @@ public class JT808Handler extends SimpleChannelInboundHandler<byte[]> {
 					IJT808Cache.FB_CACHE.getIfPresent(key).writeBytes(content);
 
 					// 因为要return 在这里释放
-					content.release();
-					buff.release();
 					return;
 				}
 			} else {
@@ -179,16 +175,21 @@ public class JT808Handler extends SimpleChannelInboundHandler<byte[]> {
 				}
 
 			} else {
-				log.error("校验码有误:" + Utils.bytesToHex(msg));
+				log.error("校验码有误:{}" , Utils.bytesToHex(msg));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e.getLocalizedMessage());
 		} finally {
-			if (content != null)
-				content.release();
-			buff.release();
-			msg = null;
+			try {
+				if (content != null)
+					content.release();
+				buff.release();
+				msg = null;
+			} catch (Exception e) {
+				System.out.println(Utils.bytesToHex(msg));
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -196,6 +197,7 @@ public class JT808Handler extends SimpleChannelInboundHandler<byte[]> {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
+		/* 断开不算离线，超过一定时间不上报才算
 		if (ctx.channel().hasAttr(AttributeKey.valueOf("TID"))) {
 			Set<String> sets = SetsUtils.get(ctx.channel());
 			// logger.info("Socket断开，离线终端:{}",JSON.toJSONString(sets));
@@ -206,6 +208,7 @@ public class JT808Handler extends SimpleChannelInboundHandler<byte[]> {
 			}
 
 		}
+		*/
 	}
 
 	@Override

@@ -1,11 +1,11 @@
 package com.tracbds.core.bean;
 
-public class LatLng {
+public class Point {
 
 	private double lat;
 	private double lng;
-	public LatLng() {}
-	public LatLng(double lat, double lng) {
+	public Point() {}
+	public Point(double lat, double lng) {
 		this.lat = lat;
 		this.lng = lng;
 	}

@@ -15,7 +15,7 @@
 操作日志=Operation Log
 登录日志=Login log
 位置监控=Location
-实时定位=Realtime
+实时定位=Realtime monitoring
 视频监控=Video
 主动安全=Security
 设备管理=Device
@@ -25,11 +25,13 @@
 
 电子围栏=Fence
 统计报表=Report
-分组监控=Group
+分组监控=Group monitoring
 轨迹回放=History
 轨迹回放1=History1
 轨迹回放2=History2
 多车轨迹=History3
+轨迹回放(多个)=History(multiple)
+轨迹回放(抽稀)=History(dilution)
 告警记录=Alarm
 指令记录=Command
 拍照记录=Photos
@@ -37,7 +39,22 @@
 实时视频=Realtime Video
 历史视频=History Video
 
+
+管理中心=Management
+状态管理=Status Management
+规则管理=Rule Management
+动作管理=Action Management
+围栏管理=Fence
+
+离线统计=Offline Report
+里程统计(天)=Mileage Report(Day)
+里程统计(月)=Mileage Report(Month)
+报警统计=Alarm Report
+油量图表=Oil Charts
+
+
 #模型
+状态解析器=State parser
 SIM卡管理=SIM Card
 车牌号=Vehicle No
 SIM卡号=SIM
@@ -129,10 +146,34 @@ SIM号码=SIM
 飞行器=Aircraft
 卡车=Truck
 
+规则名称=Name
+规则模板=Rule
+绑定设备=Device
+执行动作=Action
+动作名称=Name
+动作模板=Action
+实现类=Class
+参数=Param
+状态模板=Status
+超速阀值=Speed limit
+触发方式=Trigger Mode
+出围栏=Out fence
+进围栏=Enter fence
+进出围栏=Enter/Out fence
+
 设备号|设备名称=Device ID|Name
 开始时间=Start Time
 结束时间=End Time
 地图展示=Map View
+地图类型=Map Type
+中文名称=Name1
+英文名称=Name2
+
+指令设置=Command
+指令=Command
+指令名称=Name
+是=YES
+否=NO
 
 分组授权=Group
 指令授权=Cmd Auth
@@ -153,6 +194,7 @@ SIM号码=SIM
 天后到期=Day Expires
 定位=Locate
 未定位=Not locate
+紧急报警=SOS Alarm
 超速报警=Speed Alarm
 疲劳报警=Fatigue Alarm
 耗时ms=Time(ms)
@@ -172,6 +214,7 @@ SIM号码=SIM
 终端显示器显示=Device dispay
 终端TTS播读=TTS 
 广告屏显示=Ad screen display
+摄像头通道=Camera channel
 
 操作成功=Success
 操作失败=Fail

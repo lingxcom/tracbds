@@ -13,6 +13,7 @@
 	 http://www.springframework.org/schema/aop   
      http://www.springframework.org/schema/aop/spring-aop-3.2.xsd ">
 	<import resource="classpath*:xml/lingx-*.xml"/>
+	<bean class="com.tracbds.server.swing.CustomPropertyConfigurer"/>
 	<!--注解扫描 -->
 	<context:component-scan base-package="com.lingx,com.tracbds" />
 	<!-- 启用AOP注解功能 ：该功能慎重开启

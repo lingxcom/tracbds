@@ -38,6 +38,9 @@
     <logger name="com.lingx" additivity="false" level="INFO" >
         <appender-ref ref="LogAppender"/>
     </logger>
+    <logger name="com.tracbds" additivity="false" level="INFO" >
+        <appender-ref ref="LogAppender"/>
+    </logger>
     <!-- 设置日志输出级别 -->
     <root level="ERROR">
         <appender-ref ref="CONSOLE" />

@@ -5,8 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.tracbds.core.IJT808Cache;
 import com.tracbds.core.utils.DateUtils;
+import com.tracbds.core.utils.JT808Utils;
 import com.tracbds.core.utils.LatLngUtils;
 import com.tracbds.core.utils.Utils;
 import com.lingx.service.LanguageService;
@@ -28,8 +31,8 @@ public class JT808CommonService {
 	public static final Map<String, String> TID_CARNO = new HashMap<>();// tid与carno的映射缓存
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-	@Autowired
-	private JT808AlarmService alarmService;
+	//@Autowired
+	//private JT808AlarmService alarmService;
 	@Autowired
 	private DatabaseConfigService databaseConfigService;
 	@Resource 
@@ -83,9 +86,10 @@ public class JT808CommonService {
 		map.put("comment", this.getComment(map,language));
 		map.put("status_leftcar", this.getLeftCarStatusString(map,language));// 左侧树型状态描述
 		map.put("dtlc", this.getDtlc(car_id));
-		
-		put("status_str", alarmService.handleStatus(Long.parseLong(map.get("status").toString()),language), map);
-		put("alarm_str", alarmService.handleAlarm(Long.parseLong(map.get("alarm").toString()),language), map);
+		if(!map.containsKey("status_str"))map.put("status_str", "-");
+		if(!map.containsKey("alarm_str"))map.put("alarm_str", "-");
+		//JT808Utils.putMap("status_str", alarmService.handleStatus(Long.parseLong(map.get("status").toString()),language), map);
+		//JT808Utils.putMap("alarm_str", alarmService.handleAlarm(Long.parseLong(map.get("alarm").toString()),language), map);
 		
 		map.put("address", "-");// 改为不是每次上报都需要取地址，被调用时再取
 
@@ -136,26 +140,7 @@ public class JT808CommonService {
 			return String.format("%.1f", new Float(temp));//new Float(temp).intValue();
 	}
 
-	private void put(String key, String value, Map<String, Object> map) {
-		if (map.containsKey(key)) {
-			String temp = map.get(key).toString();
-			if(!temp.contains(value)) {
-				temp = value + "," +temp ;
-				map.put(key, temp);
-			}
-		} else {
-			map.put(key, value);
-		}
-		String temp = map.get(key).toString();
-		temp = "," + temp + ",";
-		temp = temp.replace(",,", ",");
-		if (temp.length() > 3)
-			temp = temp.replace(",-,", ",");
-		temp = temp.replace(",,", ",");
-		temp = temp.substring(1, temp.length() - 1);
-
-		map.put(key, temp);
-	}
+	
 
 	public String getComment(Map<String, Object> map,String language) {
 		String comment = "";
@@ -233,10 +218,10 @@ public class JT808CommonService {
 */
 
 	public void setStatusAlarmString(List<Map<String, Object>> list,String language) {
-		for (Map<String, Object> map : list) {
-			put("status_str", alarmService.handleStatus(Long.parseLong(map.get("status").toString()),language), map);
-			put("alarm_str", alarmService.handleAlarm(Long.parseLong(map.get("alarm").toString()),language), map);
-		}
+		//for (Map<String, Object> map : list) {
+			//JT808Utils.putMap("status_str", alarmService.handleStatus(Long.parseLong(map.get("status").toString()),language), map);
+			//JT808Utils.putMap("alarm_str", alarmService.handleAlarm(Long.parseLong(map.get("alarm").toString()),language), map);
+		//}
 	}
 
 	
@@ -264,12 +249,9 @@ public class JT808CommonService {
 			if (map.get("status") == null)
 				map.put("status", 0);
 
-			long alarm = Long.parseLong(map.get("alarm").toString());
-			//System.out.println("getAlarmConfigValue:"+this.alarmService.getAlarmConfigValue());
-			//System.out.println((alarm & this.alarmService.getAlarmConfigValue()));
-			//System.out.println((map.containsKey("alarm_str") && Utils.isNotNull(map.get("alarm_str").toString())&& !"无".equals(map.get("alarm_str").toString())));
-			if ((alarm & this.alarmService.getAlarmConfigValue()) > 0)
-				return 1;
+			//long alarm = Long.parseLong(map.get("alarm").toString());
+			//if ((alarm & this.alarmService.getAlarmConfigValue()) > 0)
+			//	return 1;
 			if (map.containsKey("alarm_str") && Utils.isNotNull(map.get("alarm_str").toString())
 					&& !"-".equals(map.get("alarm_str").toString()))
 				return 1;
@@ -310,13 +292,13 @@ public class JT808CommonService {
 		}
 	}
 
-	public String getAlarmConfig() {
-		return JSON.toJSONString(this.alarmService.getAlarmConfig());
-	}
+	//public String getAlarmConfig() {
+	//	return JSON.toJSONString(this.alarmService.getAlarmConfig());
+	//}
 
-	public String getStatusConfig() {
-		return JSON.toJSONString(this.alarmService.getStatusConfig());
-	}
+	//public String getStatusConfig() {
+	//	return JSON.toJSONString(this.alarmService.getStatusConfig());
+	//}
 
 	public void pushMessageToAdmin(String content) {
 		String userid, roleid = databaseConfigService.getConfigValue("lingx.super.role.code", ""),
@@ -374,6 +356,14 @@ public class JT808CommonService {
 
 	}
 
+	public Set<String> getUserIdsById(String id) {
+		Set<String> sets=new HashSet<>();
+		List<Map<String,Object>> list=this.jdbcTemplate.queryForList("select user_id from tgps_group_user where group_id in (select group_id from tgps_group_car where car_id=?)",id);
+		for(Map<String,Object> map:list) {
+			sets.add(map.get("user_id").toString());
+		}
+		return sets;
+	}
 	public String getFx(int number) {
 		int nums[] = new int[] { 0, 45, 90, 135, 180, 225, 270, 315, 360 };
 		String array[] = new String[] { "北", "东北", "东", "东南", "南", "西南", "西", "西北", "北" };

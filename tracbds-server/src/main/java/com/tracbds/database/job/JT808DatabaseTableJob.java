@@ -98,31 +98,15 @@ public class JT808DatabaseTableJob {
 			String time=sdf.format(date);
 			String dateStr=sdf2.format(date);
 			this.jdbcTemplate.update("delete from tgps_car_alarm where gpstime<?",time);//清除报警记录
-			this.jdbcTemplate.update("delete from tsb_adas where gpstime<?",time);
-			this.jdbcTemplate.update("delete from tsb_dsm where gpstime<?",time);
-			this.jdbcTemplate.update("delete from tsb_bsd where gpstime<?",time);
-			this.jdbcTemplate.update("delete from tsb_idms where gpstime<?",time);
-			this.jdbcTemplate.update("delete from tsb_adas_file where ts<?",time);
 			this.jdbcTemplate.update("delete from tgps_car_cmd where ts<?",time);
 			this.jdbcTemplate.update("delete from tgps_event where ts<?",time);
-			this.jdbcTemplate.update("delete from tgps_car_cmd where ts<?",time);
-			this.jdbcTemplate.update("delete from tgps_jt808_touchuan where ts<?",time);
 
-
-			this.jdbcTemplate.update("delete from tsb_tpms_alarm where gpstime<?",time);
-			this.jdbcTemplate.update("delete from tsb_tpms where gpstime<?",time);
-			this.jdbcTemplate.update("delete from tsb_tpms_item where tpms_id not in (select id from tsb_tpms)");
-			
-			this.jdbcTemplate.update("delete from tgps_jt1078_count where stime<?",time);
 			date = new Date();
 			date.setDate(date.getDate() - days);
 			 time=sdf.format(date);
 			 dateStr=sdf2.format(date);
-			this.jdbcTemplate.update("delete from tgps_xcjl where stime<?",time);
 			this.jdbcTemplate.update("delete from tgps_mileage where create_time<?",dateStr);
 			
-			this.jdbcTemplate.update("delete from tgps_index_dtlc where date8<?",dateStr);
-			this.jdbcTemplate.update("delete from tgps_index_online where date8<?",dateStr);
 			
 			this.jdbcTemplate.update("truncate tlingx_message");
 		}

@@ -14,6 +14,7 @@ import com.tracbds.core.IJT808Cache;
 import com.tracbds.core.IJT808MsgAttached;
 import com.tracbds.core.IJT808MsgHandler;
 import com.tracbds.core.bean.AttachedBean0x0200;
+import com.tracbds.core.service.StatusParserService;
 import com.tracbds.core.utils.JT808Utils;
 import com.tracbds.core.utils.Utils;
 
@@ -24,6 +25,8 @@ public class Msg0201 extends AbstrctMsgHandler implements IJT808MsgHandler{
 	@Autowired
 	private List<IJT808MsgAttached> listAttached;
 
+	@Autowired
+	private StatusParserService statusParserService;
 	@Override
 	public int getMsgId() {
 		return 0x0201;
@@ -85,9 +88,10 @@ public class Msg0201 extends AbstrctMsgHandler implements IJT808MsgHandler{
 				}
 			}
 		}
+		statusParserService.parse(map, listAttachedBean0x0200);
 		
-		String json=(JSON.toJSONString(map));
-		IJT808Cache.GPS_DATA_QUEUE.add(json);
+		//String json=(JSON.toJSONString(map));
+		IJT808Cache.GPS_DATA_QUEUE.add(map);
 		
 	}
 

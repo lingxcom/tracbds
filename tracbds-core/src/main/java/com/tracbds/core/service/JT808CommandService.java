@@ -37,7 +37,6 @@ public class JT808CommandService {
 				while (tid.charAt(0) == '0') {
 					tid = tid.substring(1);
 				}
-				Map<String,Object> last=(Map<String,Object>)JSON.parse(json);
 					IJT808Cache.SEND_COMMAND_QUEUE.add( this.getJSONString(tid, content, msgId, msgSn));
 
 					String key=JT808Utils.getResKey(tid, msgId, msgSn);//tid_msgSn

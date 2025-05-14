@@ -23,7 +23,7 @@ public interface IJT808Cache {
 	/**
 	 * 实时定位数据
 	 */
-	public static ConcurrentLinkedQueue<String> GPS_DATA_QUEUE=new ConcurrentLinkedQueue<String>();
+	public static ConcurrentLinkedQueue<Map<String,Object>> GPS_DATA_QUEUE=new ConcurrentLinkedQueue<>();
 	/**
 	 * 历史补传数据
 	 */

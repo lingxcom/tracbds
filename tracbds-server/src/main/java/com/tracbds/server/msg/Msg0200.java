@@ -6,21 +6,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.druid.Constants;
-import com.alibaba.fastjson.JSON;
 import com.tracbds.core.IJT808Cache;
 import com.tracbds.core.IJT808MsgAttached;
 import com.tracbds.core.IJT808MsgHandler;
 import com.tracbds.core.bean.AttachedBean0x0200;
 import com.tracbds.core.event.JT808Location0200Event;
 import com.tracbds.core.event.JT808OnlineAndLoctionEvent;
+import com.tracbds.core.service.StatusParserService;
 import com.tracbds.core.utils.Utils;
-import com.tracbds.server.netty.JT808Handler;
-import com.tracbds.server.service.JT808ServerConfigService;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -31,7 +27,8 @@ public class Msg0200 extends AbstrctMsgHandler implements IJT808MsgHandler{
 	private List<IJT808MsgAttached> listAttached;
 	@Autowired
 	private ApplicationContext spring;
-
+	@Autowired
+	private StatusParserService statusParserService;
 	@Override
 	public int getMsgId() {
 		return 0x0200;
@@ -115,15 +112,16 @@ public class Msg0200 extends AbstrctMsgHandler implements IJT808MsgHandler{
 		} catch (Exception e) {
 		}
 		
+		statusParserService.parse(map, listAttachedBean0x0200);
+		
 		if(spring!=null)
 		spring.publishEvent(new JT808Location0200Event(spring,map,bytes1));
-		String json=(JSON.toJSONString(map));
+		//String json=(JSON.toJSONString(map));
 		
-		IJT808Cache.GPS_DATA_QUEUE.add(json);
+		IJT808Cache.GPS_DATA_QUEUE.add(map);
 		
-		map.clear();
 		map=null;
-		json=null;
+		//json=null;
 		bytes=null;
 		
 	}

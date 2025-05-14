@@ -1,5 +1,7 @@
 package com.tracbds.core.utils;
 
+import java.util.Map;
+
 import com.alibaba.fastjson.JSON;
 import com.tracbds.core.bean.RetBean;
 
@@ -153,5 +155,25 @@ public class JT808Utils {
 			}
 		}
 		return array[index];
+	}
+	public static void putMap(String key, String value, Map<String, Object> map) {
+		if (map.containsKey(key)) {
+			String temp = map.get(key).toString();
+			if(!temp.contains(value)) {
+				temp = temp + "," + value;
+				map.put(key, temp);
+			}
+		} else {
+			map.put(key, value);
+		}
+		String temp = map.get(key).toString();
+		temp = "," + temp + ",";
+		temp = temp.replace(",,", ",");
+		if (temp.length() > 3)
+			temp = temp.replace(",-,", ",");
+		temp = temp.replace(",,", ",");
+		temp = temp.substring(1, temp.length() - 1);
+
+		map.put(key, temp);
 	}
 }
