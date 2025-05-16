@@ -33,29 +33,38 @@ Some of the available features include:
 - Account and device management
 - jt808-2013 and jt808-2019 support
 
+## Getting Started
+> Run in IDE: com.tracbds.server.AppUI
 ## TODO
  - JT1078-2016 Real time Video Monitoring
 
 ## Preview
 - Software Startup Tool
+
 ![index](readme/20250516164941.png "index.png")
 
 - Database Configuration Tool
+
 ![index](readme/20250516165024.png "index.png")
 
 - Real-time GPS tracking
+
 ![index](readme/20250516165146.png "index.png")
 
 - Real-time GPS tracking Group
+
   ![index](readme/20250516165319.png "index.png")
 
 - History
+
   ![index](readme/20250516165526.png "index.png")
 
 - History(dilution)
+
   ![index](readme/20250516165713.png "index.png")
 
 - History(multiple)
+
   ![index](readme/20250516165854.png "index.png")
 
 ## License
