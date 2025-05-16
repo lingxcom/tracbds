@@ -11,11 +11,10 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.lingx.web.ILingxThread;
+import com.tracbds.api.common.WebSocketApi1005;
 import com.tracbds.core.IJT808Cache;
 import com.tracbds.core.service.JT808CommonService;
 import com.tracbds.core.utils.Utils;
-import com.tracbds.server.netty.websocket.WebSocketHandler;
-import com.tracbds.server.netty.websocket.api.WebSocketApi1005;
 import com.tracbds.server.service.JT808DataService;
 
 import io.netty.channel.Channel;
@@ -117,7 +116,7 @@ public class JT8080x0200Handler implements Runnable,ILingxThread {
 		for(String key:map.keySet()) {
 			if(map.get(key).contains(tid)) {
 				
-				Channel channel=WebSocketHandler.WEBSOCKET_SESSIONS.getIfPresent(key);
+				Channel channel=WebSocketApi1005.WEBSOCKET_SESSIONS.getIfPresent(key);
 				if(channel!=null) {
 					String language=channel.attr(WebSocketApi1005.channel_langugae_key).get();
 					this.commonService.addJT808Info(map0x0200,language);

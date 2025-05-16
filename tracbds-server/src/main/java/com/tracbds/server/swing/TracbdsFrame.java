@@ -77,8 +77,8 @@ public class TracbdsFrame extends JFrame {
 
         this.add(new JLabel("WEB端口(Web Port):",JLabel.RIGHT),"flex:3");
         this.add(textField3,"flex:5;wrap;");
-        this.add(new JLabel("Websocket端口(Port):",JLabel.RIGHT),"flex:3");
-        this.add(textField4,"flex:5;wrap;");
+        //this.add(new JLabel("Websocket端口(Port):",JLabel.RIGHT),"flex:3");
+        //this.add(textField4,"flex:5;wrap;");
 
         this.add(new JLabel("JT808端口(JT808 Port):",JLabel.RIGHT),"flex:3");
         this.add(textField2,"flex:5;wrap;");

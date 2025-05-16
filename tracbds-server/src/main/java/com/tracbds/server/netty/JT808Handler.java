@@ -22,7 +22,6 @@ import com.tracbds.core.event.JT808OnlineEvent;
 import com.tracbds.core.support.MyByteBuf;
 import com.tracbds.core.utils.JT808Utils;
 import com.tracbds.core.utils.Utils;
-import com.tracbds.server.netty.websocket.WebsocketUtils;
 import com.tracbds.server.service.JT808DataService;
 
 import io.netty.buffer.ByteBuf;
@@ -60,9 +59,7 @@ public class JT808Handler extends SimpleChannelInboundHandler<byte[]> {
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, byte[] msg) throws Exception {
 		// System.out.println(Utils.bytesToHex(msg));
-		if (WebsocketUtils.isPush) {
-			WebsocketUtils.push(Utils.bytesToHex(msg));
-		}
+		
 		ByteBuf content = null;
 		MyByteBuf buff = null;
 		try {

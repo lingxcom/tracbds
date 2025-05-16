@@ -14,10 +14,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.tracbds.api.common.WebSocketApi1005;
 import com.tracbds.core.IJT808Cache;
 import com.tracbds.core.service.JT808CommonService;
-import com.tracbds.server.netty.websocket.WebSocketHandler;
-import com.tracbds.server.netty.websocket.api.WebSocketApi1005;
 
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -60,7 +59,7 @@ public class OnlineJob {
 		Map<String,Set<String>> map=IJT808Cache.REALTIME_TIDS.asMap();
 		for(String key:map.keySet()) {
 			if(map.get(key).contains(tid)) {
-				Channel channel=WebSocketHandler.WEBSOCKET_SESSIONS.getIfPresent(key);
+				Channel channel=WebSocketApi1005.WEBSOCKET_SESSIONS.getIfPresent(key);
 
 				if(channel!=null) {
 					String language=channel.attr(WebSocketApi1005.channel_langugae_key).get();
