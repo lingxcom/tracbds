@@ -16,7 +16,6 @@ BDS+GPS Tracking System  is a location monitoring system based on the Chinese Mi
 
 - [Terminal device simulation software](https://github.com/lingxcom/jt808-client)
 
-
 ## Demo
 
 https://tracbds.lingx.com/

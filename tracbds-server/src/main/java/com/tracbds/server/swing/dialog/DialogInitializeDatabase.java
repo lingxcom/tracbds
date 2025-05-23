@@ -43,7 +43,7 @@ public class DialogInitializeDatabase extends JDialog{
         MJTextField text2 = new MJTextField(PropUtils.getProp("tracbds.database.port","3306"));
         MJTextField text3 = new MJTextField(PropUtils.getProp("tracbds.database.username","root"));
         MJTextField text4 = new MJTextField(PropUtils.getProp("tracbds.database.password",""));
-		this.add(new JLabel("数据库建议MySql8.0.x；数据库tracbds不存在时，创建数据库并执行SQL脚本。"),"flex:12;");
+		this.add(new JLabel("数据库MySql8.0.x；数据库tracbds不存在时，创建数据库并执行SQL脚本。"),"flex:12;");
 		this.add(new JLabel("Database MySql8.0.x; When database tracbds not exist,create and executes SQL scripts."),"flex:12;");
 		this.add(new JLabel("IP地址(IP):",JLabel.RIGHT),"flex:3");
 		this.add(text1,"flex:8;wrap;");
